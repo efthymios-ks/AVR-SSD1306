@@ -2,7 +2,7 @@
 #define TWI_SETTINGS_H_
 /*
 ||
-||  Filename:	 		TWI_CONFIG.h
+||  Filename:	 		TWI_Settings.h
 ||  Title: 			    TWI Driver Settings
 ||  Author: 			Efthymios Koktsidis
 ||	Email:				efthymios.ks@gmail.com
