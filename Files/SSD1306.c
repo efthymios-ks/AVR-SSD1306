@@ -372,7 +372,7 @@ void GLCD_DrawBitmap(const uint8_t *Bitmap, uint8_t Width, const uint8_t Height,
 
 	//#6 - Update last line, if needed
 	//If (LINE_STARTING != LINE_ENDING)
-	if (__GLCD_getLine(y2) != __GLCD_getLine((y2 + __GLCD.Font.Height - 1)) && y < __GLCD_Screen_Height)
+	if (__GLCD_getLine(y2) != __GLCD_getLine((y2 + Height - 1)) && y < __GLCD_Screen_Height)
 	{
 		//Go to the start of the line
 		GLCD_GotoXY(x, y);
