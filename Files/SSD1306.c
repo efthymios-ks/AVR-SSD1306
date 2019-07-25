@@ -7,7 +7,7 @@ GLCD_t __GLCD;
 
 #define __I2C_SLA_W(Address)		(Address<<1)
 #define __I2C_SLA_R(Address)		((Address<<1) | (1<<0))
-#define __GLCD_getLine(Y)			(Y / __GLCD_Screen_Height)
+#define __GLCD_getLine(Y)			(Y / __GLCD_Screen_Line_Height)
 #define __GLCD_Min(X, Y)			((X < Y) ? X : Y)
 #define __GLCD_AbsDiff(X, Y)		((X > Y) ? (X - Y) : (Y - X))
 #define __GLCD_Swap(X, Y)			do { typeof(X) t = X; X = Y; Y = t; } while (0)
@@ -185,7 +185,7 @@ void GLCD_GotoX(const uint8_t X)
 
 void GLCD_GotoY(const uint8_t Y)
 {
-	if (__GLCD.Y < __GLCD_Screen_Height)
+	if (Y < __GLCD_Screen_Height)
 		__GLCD.Y = Y;
 }
 
@@ -371,7 +371,8 @@ void GLCD_DrawBitmap(const uint8_t *Bitmap, uint8_t Width, const uint8_t Height,
 	}
 
 	//#6 - Update last line, if needed
-	if (lines > 1)
+	//If (LINE_STARTING != LINE_ENDING)
+	if (__GLCD_getLine(y2) != __GLCD_getLine((y2 + Height - 1)) && y < __GLCD_Screen_Height)
 	{
 		//Go to the start of the line
 		GLCD_GotoXY(x, y);
@@ -998,7 +999,7 @@ void GLCD_PrintChar(char Character)
 
 	//#7 - Update last line, if needed
 	//If (LINE_STARTING != LINE_ENDING)
-	if (__GLCD_getLine(y2) != __GLCD_getLine(y2 + __GLCD.Font.Height))
+	if (__GLCD_getLine(y2) != __GLCD_getLine((y2 + __GLCD.Font.Height - 1)) && y < __GLCD_Screen_Height)
 	{
 		//Go to the start of the line
 		GLCD_GotoXY(x, y);
@@ -1080,7 +1081,7 @@ void GLCD_PrintInteger(const int32_t Value)
 	}
 }
 
-void GLCD_PrintDouble(double Value, const uint32_t Tens)
+void GLCD_PrintDouble(double Value, const uint8_t Precision)
 {
 	if (Value == 0)
 	{
@@ -1105,7 +1106,7 @@ void GLCD_PrintDouble(double Value, const uint32_t Tens)
 		GLCD_PrintChar('.');
 		
 		//Print decimal part
-		GLCD_PrintInteger((Value - (uint32_t)(Value)) * Tens);
+		GLCD_PrintInteger((Value - (uint32_t)(Value)) * pow(10, Precision));
 	}
 }
 
@@ -1227,7 +1228,7 @@ static void Int2bcd(int32_t Value, char BCD[])
 		Value = -Value;
 	}
 	
-	while (Value > 1000000000)
+	while (Value >= 1000000000)
 	{
 		Value -= 1000000000;
 		BCD[1]++;

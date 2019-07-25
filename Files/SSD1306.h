@@ -24,6 +24,11 @@
 #include "TWI.h"
 //--------------------------//
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 //----- Auxiliary data ---------------------------//
 #define __GLCD_I2C_Address							0x3C	//0x3C or 0x3D
 
@@ -203,6 +208,11 @@ void GLCD_PrintChar(char Character);
 void GLCD_PrintString(const char *Text);
 void GLCD_PrintString_P(const char *Text);
 void GLCD_PrintInteger(const int32_t Value);
-void GLCD_PrintDouble(double Value, const uint32_t Tens);
+void GLCD_PrintDouble(double Value, const uint8_t Precision);
 //-----------------------------------------------------------------------------//
+	
+#ifdef __cplusplus
+}
+#endif
+
 #endif
