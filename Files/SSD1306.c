@@ -185,7 +185,7 @@ void GLCD_GotoX(const uint8_t X)
 
 void GLCD_GotoY(const uint8_t Y)
 {
-	if ( Y < __GLCD_Screen_Height)
+	if (Y < __GLCD_Screen_Height)
 		__GLCD.Y = Y;
 }
 
