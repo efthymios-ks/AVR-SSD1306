@@ -4,7 +4,7 @@
 int main(void)
 {	
 	GLCD_Setup();
-	GLCD_SetFont(Font5x8, 5, 8, GLCD_OverWrite);
+	GLCD_SetFont(Font5x8, 5, 8, GLCD_Overwrite);
 
 	GLCD_GotoXY(0, 0);
 	GLCD_PrintString("Testing");
