@@ -32,7 +32,7 @@ extern "C"
 //----- Auxiliary data ---------------------------//
 #define GLCD_128_64 						0
 #define GLCD_128_32						1 
-#define GLCD_96_32						2
+#define GLCD_96_16						2
 	
 #define __GLCD_I2C_Address					0x3C	//0x3C or 0x3D
 
