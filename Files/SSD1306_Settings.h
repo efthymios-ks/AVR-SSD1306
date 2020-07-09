@@ -3,7 +3,7 @@
 /*
 ||
 ||  Filename:	 		SSD1306_Settings.h
-||  Title: 			    SSD1306 Driver Settings
+||  Title: 			  SSD1306 Driver Settings
 ||  Author: 			Efthymios Koktsidis
 ||	Email:				efthymios.ks@gmail.com
 ||  Compiler:		 	AVR-GCC
@@ -27,10 +27,8 @@
 //#define GLCD_128_32
 //#define GLCD_96_16
 
-//Specify whether error checking while transceiving data via I2C should be done.
-//No error checking:	0
-//Error checking:		Any other value
-#define GLCD_Error_Checking		1
+//Specify whether error checking while transceiving data via I2C should be done. 
+//#define GLCD_Error_Checking	
 
 //Match auxiliary functions to your defined I2C functions
 //Setup TWI peripheral at 400KHz
