@@ -99,7 +99,7 @@ extern "C"
 #define _GLCD_Delay_1						1
 #define _GLCD_Delay_2						10
 
-#if (GLCD_Error_Checking != 0)
+#if defined(GLCD_Error_Checking)
 	enum GLCD_Status_t
 	{
 		GLCD_Ok,
@@ -136,7 +136,7 @@ typedef struct
 
 typedef struct
 {
-	#if (GLCD_Error_Checking != 0)
+	#if defined(GLCD_Error_Checking)
 		enum GLCD_Status_t Status;
 	#endif
 	uint8_t X;
@@ -151,7 +151,7 @@ void GLCD_SendCommand(uint8_t Command);
 void GLCD_SendData(const uint8_t Data);
 void GLCD_Setup(void);
 void GLCD_Reset(void);
-#if (GLCD_Error_Checking != 0)
+#if defined(GLCD_Error_Checking)
 	enum GLCD_Status_t GLCD_GetStatus(void);
 #endif
 void GLCD_Render(void);
