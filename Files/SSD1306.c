@@ -7,10 +7,10 @@ GLCD_t __GLCD;
 
 #define __I2C_SLA_W(Address)		(Address<<1)
 #define __I2C_SLA_R(Address)		((Address<<1) | (1<<0))
-#define __GLCD_getLine(Y)			(Y / __GLCD_Screen_Line_Height)
-#define __GLCD_Min(X, Y)			((X < Y) ? X : Y)
+#define __GLCD_GetLine(Y)		(Y / __GLCD_Screen_Line_Height)
+#define __GLCD_Min(X, Y)		((X < Y) ? X : Y)
 #define __GLCD_AbsDiff(X, Y)		((X > Y) ? (X - Y) : (Y - X))
-#define __GLCD_Swap(X, Y)			do { typeof(X) t = X; X = Y; Y = t; } while (0)
+#define __GLCD_Swap(X, Y)		do { typeof(X) t = X; X = Y; Y = t; } while (0)
 #define __GLCD_Byte2ASCII(Value)	(Value = Value + '0')
 #define __GLCD_Pointer(X, Y)		(X + ((Y / __GLCD_Screen_Line_Height) *__GLCD_Screen_Width))
 //---------------------------//
@@ -38,10 +38,9 @@ void GLCD_SendData(const uint8_t Data)
 void GLCD_Setup(void)
 {
 	//Reset if needed
-	#ifdef GLCD_RES
-	PinMode(GLCD_RES, Output);
-
-	GLCD_Reset();
+	#ifdef defined(GLCD_RST) 
+		PinMode(GLCD_RST, Output);
+		GLCD_Reset();
 	#endif
 
 	//Setup I2C hardware
@@ -49,39 +48,40 @@ void GLCD_Setup(void)
 
 	//Commands needed for initialization
 	//-------------------------------------------------------------
-	GLCD_SendCommand(__GLCD_Command_Display_Off);					//0xAE
+	GLCD_SendCommand(__GLCD_Command_Display_Off);				//0xAE
 	
-	GLCD_SendCommand(__GLCD_Command_Display_Clock_Div_Ratio_Set);	//0xD5
-	GLCD_SendCommand(0xF0);											//Suggest ratio
+	GLCD_SendCommand(__GLCD_Command_Display_Clock_Div_Ratio_Set);		//0xD5
+	GLCD_SendCommand(0xF0);							//Suggest ratio
 	
 	GLCD_SendCommand(__GLCD_Command_Multiplex_Radio_Set);			//0xA8
 	GLCD_SendCommand(__GLCD_Screen_Height - 1);
 	
 	GLCD_SendCommand(__GLCD_Command_Display_Offset_Set);			//0xD3
-	GLCD_SendCommand(0x00);											//No offset
+	GLCD_SendCommand(0x00);							//No offset
 
-	GLCD_SendCommand(__GLCD_Command_Charge_Pump_Set);				//0x8D
-	GLCD_SendCommand(0x14);											//Enable charge pump
+	GLCD_SendCommand(__GLCD_Command_Charge_Pump_Set);			//0x8D
+	GLCD_SendCommand(0x14);							//Enable charge pump
 
-	GLCD_SendCommand(__GLCD_Command_Display_Start_Line_Set | 0x00);	//0x40 | Start line
+	GLCD_SendCommand(__GLCD_Command_Display_Start_Line_Set | 0x00);		//0x40 | Start line
 	
-	GLCD_SendCommand(__GLCD_Command_Memory_Addressing_Set);				//0x20
-	GLCD_SendCommand(0x00);											//Horizontal Addressing - Operate like KS0108
+	GLCD_SendCommand(__GLCD_Command_Memory_Addressing_Set);			//0x20
+	GLCD_SendCommand(0x00);							//Horizontal Addressing - Operate like KS0108
 	
 	GLCD_SendCommand(__GLCD_Command_Segment_Remap_Set | 0x01);		//0xA0 - Left towards Right
 
 	GLCD_SendCommand(__GLCD_Command_Com_Output_Scan_Dec);			//0xC8 - Up towards Down
 
-	GLCD_SendCommand(__GLCD_Command_Com_Pins_Set);					//0xDA
-	#if (GLCD_Size == GLCD_128_64)
-		GLCD_SendCommand(0x12);										//Sequential COM pin configuration
-	#elif (GLCD_Size == GLCD_128x32)
-		GLCD_SendCommand(0x02);										//Alternative COM pin configuration
-	#elif (GLCD_Size == GLCD_96x16)
-		GLCD_SendCommand(0x02);										//Alternative COM pin configuration
+	GLCD_SendCommand(__GLCD_Command_Com_Pins_Set);				//0xDA
+	
+	#if defined(GLCD_128_64)
+		GLCD_SendCommand(0x12);						//Sequential COM pin configuration
+	#elif defined(GLCD_128_32)
+		GLCD_SendCommand(0x02);						//Alternative COM pin configuration
+	#elif defined(GLCD_96x16)
+		GLCD_SendCommand(0x02);						//Alternative COM pin configuration
 	#endif
 	
-	GLCD_SendCommand(__GLCD_Command_Constrast_Set);					//0x81
+	GLCD_SendCommand(__GLCD_Command_Constrast_Set);				//0x81
 	GLCD_SendCommand(0xFF);
 
 	GLCD_SendCommand(__GLCD_Command_Precharge_Period_Set);			//0xD9
@@ -91,9 +91,9 @@ void GLCD_Setup(void)
 	GLCD_SendCommand(0x20);
 
 	GLCD_SendCommand(__GLCD_Command_Display_All_On_Resume);			//0xA4
-	GLCD_SendCommand(__GLCD_Command_Display_Normal);				//0xA6
-	GLCD_SendCommand(__GLCD_Command_Scroll_Deactivate);				//0x2E
-	GLCD_SendCommand(__GLCD_Command_Display_On);					//0xAF
+	GLCD_SendCommand(__GLCD_Command_Display_Normal);			//0xA6
+	GLCD_SendCommand(__GLCD_Command_Scroll_Deactivate);			//0x2E
+	GLCD_SendCommand(__GLCD_Command_Display_On);				//0xAF
 	//-------------------------------------------------------------
 
 	//Go to 0,0
@@ -104,19 +104,19 @@ void GLCD_Setup(void)
 	__GLCD.X = __GLCD.Y = __GLCD.Font.Width = __GLCD.Font.Height = __GLCD.Font.Lines = 0;
 }
 
-#if GLCD_RES
+#if define(GLCD_RST) 
 	void GLCD_Reset(void)
 	{
-		DigitalWrite(GLCD_RES, High);
+		DigitalWrite(GLCD_RST, High);
 		_delay_ms(_GLCD_Delay_1);
-		DigitalWrite(GLCD_RES, Low);
+		DigitalWrite(GLCD_RST, Low);
 		_delay_ms(_GLCD_Delay_2);
-		DigitalWrite(GLCD_RES, High);
+		DigitalWrite(GLCD_RST, High);
 	}
 #endif
 
 #if (GLCD_Error_Checking != 0)
-	enum GLCD_Status GLCD_Status(void)
+	enum GLCD_Status_t GLCD_GetStatus(void)
 	{
 		return (__GLCD.Status);
 	}
@@ -213,7 +213,7 @@ uint8_t GLCD_GetY(void)
 
 uint8_t GLCD_GetLine(void)
 {
-	return (__GLCD_getLine(__GLCD.Y));
+	return (__GLCD_GetLine(__GLCD.Y));
 }
 
 void GLCD_SetPixel(const uint8_t X, const uint8_t Y, enum Color_t Color)
@@ -372,7 +372,7 @@ void GLCD_DrawBitmap(const uint8_t *Bitmap, uint8_t Width, const uint8_t Height,
 
 	//#6 - Update last line, if needed
 	//If (LINE_STARTING != LINE_ENDING)
-	if (__GLCD_getLine(y2) != __GLCD_getLine((y2 + Height - 1)) && y < __GLCD_Screen_Height)
+	if (__GLCD_GetLine(y2) != __GLCD_GetLine((y2 + Height - 1)) && y < __GLCD_Screen_Height)
 	{
 		//Go to the start of the line
 		GLCD_GotoXY(x, y);
@@ -999,7 +999,7 @@ void GLCD_PrintChar(char Character)
 
 	//#7 - Update last line, if needed
 	//If (LINE_STARTING != LINE_ENDING)
-	if (__GLCD_getLine(y2) != __GLCD_getLine((y2 + __GLCD.Font.Height - 1)) && y < __GLCD_Screen_Height)
+	if (__GLCD_GetLine(y2) != __GLCD_GetLine((y2 + __GLCD.Font.Height - 1)) && y < __GLCD_Screen_Height)
 	{
 		//Go to the start of the line
 		GLCD_GotoXY(x, y);
