@@ -115,7 +115,7 @@ void GLCD_Setup(void)
 	}
 #endif
 
-#if (GLCD_Error_Checking != 0)
+#if defined(GLCD_Error_Checking)
 	enum GLCD_Status_t GLCD_GetStatus(void)
 	{
 		return (__GLCD.Status);
@@ -1113,7 +1113,7 @@ void GLCD_PrintDouble(double Value, const uint8_t Precision)
 static void GLCD_Send(const uint8_t Control, uint8_t *Data, const uint8_t Length)
 {
 	uint8_t i;
-	#if (GLCD_Error_Checking != 0)
+	#if defined(GLCD_Error_Checking)
 		uint8_t status;
 	#endif
 
@@ -1122,7 +1122,7 @@ static void GLCD_Send(const uint8_t Control, uint8_t *Data, const uint8_t Length
 		//Transmit START signal
 		__I2C_Start();
 
-		#if (GLCD_Error_Checking != 0)
+		#if defined(GLCD_Error_Checking)
 			status = __I2C_Status();
 			if ((status != MT_START_TRANSMITTED) && (status != MT_REP_START_TRANSMITTED))
 			{
@@ -1134,7 +1134,7 @@ static void GLCD_Send(const uint8_t Control, uint8_t *Data, const uint8_t Length
 
 		//Transmit SLA+W
 		__I2C_Transmit(__I2C_SLA_W(__GLCD_I2C_Address));
-		#if (GLCD_Error_Checking != 0)
+		#if defined(GLCD_Error_Checking)
 			status = __I2C_Status();
 			if ((status != MT_SLA_W_TRANSMITTED_ACK) && (status != MT_SLA_W_TRANSMITTED_NACK))
 			{
@@ -1146,7 +1146,7 @@ static void GLCD_Send(const uint8_t Control, uint8_t *Data, const uint8_t Length
 
 		//Transmit control byte
 		__I2C_Transmit(Control);
-		#if (GLCD_Error_Checking != 0)
+		#if defined(GLCD_Error_Checking)
 			status = __I2C_Status();
 			if ((status != MT_DATA_TRANSMITTED_ACK) && (status != MT_DATA_TRANSMITTED_NACK))
 			{
@@ -1160,7 +1160,7 @@ static void GLCD_Send(const uint8_t Control, uint8_t *Data, const uint8_t Length
 		{
 			//Transmit data
 			__I2C_Transmit(Data[i]);
-			#if (GLCD_Error_Checking != 0)
+			#if defined(GLCD_Error_Checking)
 				status = __I2C_Status();
 				if ((status != MT_DATA_TRANSMITTED_ACK) && (status != MT_DATA_TRANSMITTED_NACK))
 				{
@@ -1171,7 +1171,7 @@ static void GLCD_Send(const uint8_t Control, uint8_t *Data, const uint8_t Length
 			
 		}
 
-		#if (GLCD_Error_Checking != 0)
+		#if defined(GLCD_Error_Checking)
 			__GLCD.Status = GLCD_Ok;
 		#endif
 		
