@@ -77,7 +77,7 @@ void GLCD_Setup(void)
 		GLCD_SendCommand(0x12);						//Sequential COM pin configuration
 	#elif (GLCD_Size == GLCD_128_32)
 		GLCD_SendCommand(0x02);						//Alternative COM pin configuration
-	#elif (GLCD_Size == GLCD_96x16)
+	#elif (GLCD_Size == GLCD_96_16)
 		GLCD_SendCommand(0x02);						//Alternative COM pin configuration
 	#endif
 	
