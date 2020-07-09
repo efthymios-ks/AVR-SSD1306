@@ -30,6 +30,10 @@ extern "C"
 #endif
 
 //----- Auxiliary data ---------------------------//
+#define GLCD_128_64 						0
+#define GLCD_128_32						1 
+#define GLCD_96_32						2
+	
 #define __GLCD_I2C_Address					0x3C	//0x3C or 0x3D
 
 #define __GLCD_RW						0
@@ -37,13 +41,13 @@ extern "C"
 #define __GLCD_DC						6
 #define __GLCD_CO						7
 
-#if defined(GLCD_128_64)
+#if (GLCD_Size == GLCD_128_64) 
 	#define __GLCD_Screen_Width          			128
 	#define __GLCD_Screen_Height         			64
-#elif defined(GLCD_128_32)
+#elif (GLCD_Size == GLCD_128_32)
 	#define __GLCD_Screen_Width         			128
 	#define __GLCD_Screen_Height        			32
-#elif defined(GLCD_96_16)
+#elif (GLCD_Size == GLCD_96_16)
 	#define __GLCD_Screen_Width          			96
 	#define __GLCD_Screen_Height         			16
 #endif
