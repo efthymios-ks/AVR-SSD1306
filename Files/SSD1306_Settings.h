@@ -15,7 +15,7 @@
 ||--------------------------
 ||	128x64	-	GLCD_128_64
 ||	128x32	-	GLCD_128_32
-||	96x16	-	GLCD_96_16
+||	 96x16	-	GLCD_96_16
 ||
 */
 
@@ -23,9 +23,7 @@
 //Comment out and edit if there is RST pin
 //#define GLCD_RST				A, 0
 
-#define GLCD_128_64
-//#define GLCD_128_32
-//#define GLCD_96_16
+#define GLCD_Size         GLCD_128_64
 
 //Specify whether error checking while transceiving data via I2C should be done. 
 //#define GLCD_Error_Checking	
