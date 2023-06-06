@@ -1,5 +1,5 @@
 ﻿#include "TWI.h"
-
+#define F_CPU 1000000UL
 #define __TWI_SLA_W(address)	(address<<1)
 #define __TWI_SLA_R(address)	((address<<1) | (1<<0))
 
