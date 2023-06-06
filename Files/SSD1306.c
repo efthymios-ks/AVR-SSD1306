@@ -104,7 +104,7 @@ void GLCD_Setup(void)
 	__GLCD.X = __GLCD.Y = __GLCD.Font.Width = __GLCD.Font.Height = __GLCD.Font.Lines = 0;
 }
 
-#if define(GLCD_RST) 
+#ifdef define(GLCD_RST) 
 	void GLCD_Reset(void)
 	{
 		DigitalWrite(GLCD_RST, High);
@@ -115,7 +115,7 @@ void GLCD_Setup(void)
 	}
 #endif
 
-#if defined(GLCD_Error_Checking)
+#ifdef defined(GLCD_Error_Checking)
 	enum GLCD_Status_t GLCD_GetStatus(void)
 	{
 		return (__GLCD.Status);

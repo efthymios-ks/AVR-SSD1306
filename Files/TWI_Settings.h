@@ -14,10 +14,10 @@
 
 //----- Configuration -------------//
 //SCL Frequency
-#define F_SCL				400000UL
+#define F_SCL				100000UL
 
 //TWI pins
-#define TWI_SCL				C, 0
-#define TWI_SDA				C, 1
+#define TWI_SCL				C, 5
+#define TWI_SDA				C, 4
 //---------------------------------//
 #endif
